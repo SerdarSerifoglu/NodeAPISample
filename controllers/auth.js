@@ -6,6 +6,7 @@ const register =async (req,res,next) => {
     const email = "serdar@gmail.com";
     const password = "123456";
 
+    try{
     //async await 
     const user = await User.create({
         name: name,
@@ -19,8 +20,19 @@ const register =async (req,res,next) => {
         success:true,
         data: user
     });
+    }catch(err){
+        return next(err);
+    }
+   
+};
+
+const errorTest = (req,res,next) => {
+    //Some Code
+    throw new Error("Bu bir hata Denemesidir");
+    //Some Code
 };
 
 module.exports = {
-    register
+    register,
+    errorTest
 };

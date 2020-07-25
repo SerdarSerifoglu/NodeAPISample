@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDatabase = require('./helpers/database/connectDatabase');
+const customErrorHandler = require("./middlewares/errors/customErrorHandler");
 const routers = require("./routers/index");
 
 const app = express();
@@ -17,6 +18,9 @@ const PORT = process.env.PORT
 
 //Router Middleware
 app.use("/api", routers);
+
+//Error Handler
+app.use(customErrorHandler);
 
 app.get('/',(req,res) => {
     res.send("Hello Serdar");
