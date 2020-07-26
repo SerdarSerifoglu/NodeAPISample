@@ -13,6 +13,9 @@ dotenv.config({
 // MongoDB Connection
 connectDatabase();
 
+//Express - Body Middleware
+app.use(express.json());
+
 
 const PORT = process.env.PORT
 
