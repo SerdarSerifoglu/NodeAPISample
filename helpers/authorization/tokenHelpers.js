@@ -16,8 +16,17 @@ const sendJwtToClient = (user, res) => {
             email: user.email
         }
     });
-}
+};
+
+const isTokenIncluded = (req) => {
+    return (
+        req.headers.authorization && req.headers.authorization.startsWith("Bearer:")
+    );
+};
+
+
 
 module.exports = {
-    sendJwtToClient
+    sendJwtToClient,
+    isTokenIncluded
 }
