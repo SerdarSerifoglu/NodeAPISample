@@ -56,4 +56,10 @@ const UserSchema = new Schema({
      
 });
 
+//.pre kaydedilmeden hemen önce yapılacak işlemleri belirlemememize yarar (Pre Hooks)
+UserSchema.pre("save", function(next){
+    console.log("Pre Hooks: Save");
+    next();
+});
+
 module.exports = mongoose.model("User", UserSchema);
