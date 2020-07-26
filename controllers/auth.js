@@ -3,8 +3,8 @@ const CustomError = require('../helpers/error/CustomError');
 const register =async (req,res,next) => {
 
     //Sample User Data
-    const name = "Serdar";
-    const email = "serdar@gmail.com";
+    const name = "Serdar22";
+    const email = "serdar22@gmail.com";
     const password = "123456";
 
     try{
