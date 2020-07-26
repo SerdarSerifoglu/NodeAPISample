@@ -5,7 +5,7 @@ const sendJwtToClient = (user, res) => {
     return res.status(200)
     .cookie("access_token", token, {
         httpOnly: true,
-        expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000), // token bitiş süresi
+        expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000 * 60), // token bitiş süresi
         secure: NODE_ENV === "development" ? false : true //development ortamında token'a gerek duymaması için
     })
     .json({
