@@ -18,4 +18,6 @@ const sendJwtToClient = (user, res) => {
     });
 }
 
-module.exports = sendJwtToClient;
+module.exports = {
+    sendJwtToClient
+}
