@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const CustomError = require('../helpers/error/CustomError');
 const register =async (req,res,next) => {
 
     //Sample User Data
@@ -28,7 +29,7 @@ const register =async (req,res,next) => {
 
 const errorTest = (req,res,next) => {
     //Some Code
-    throw new Error("Bu bir hata Denemesidir");
+    return next(new CustomError("Bu bir hata Denemesidir. Custom ERROR MESSAGE", 400));
     //Some Code
 };
 

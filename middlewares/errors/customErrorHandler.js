@@ -1,5 +1,7 @@
 const customErrorHandler = (err,req,res,next) => {
-    console.log(err);
+    let customError = err;
+    console.log(customError.message, customError.status);
+    
     res
     .status(400)
     .json({
