@@ -59,11 +59,14 @@ const UserSchema = new Schema({
 
 //.pre kaydedilmeden hemen önce yapılacak işlemleri belirlemememize yarar (Pre Hooks)
 UserSchema.pre("save", function(next){
-    
+    //Parola değiştirilmemişse tekrardan hashleme işlemini çalıştırma
+    if(!this.isModified("password")){ //isModified mongoose'un kendi fonksiyonu belirtilen alan değiştimi değişmedimi bize söylüyor
+        next();
+    }
     //bcryptjs sitesinden hazır aldık (functionları arrow functiona dönüştürdük)
     bcrypt.genSalt(10, (err, salt) => {
         if(err) next(err);
-        
+
         bcrypt.hash(this.password, salt, (err, hash) => {
             if(err) next(err);
             this.password = hash;
