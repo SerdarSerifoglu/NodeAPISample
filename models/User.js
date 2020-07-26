@@ -12,9 +12,7 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: [
-            true, "Please try different email" // email alanı veritabanında varsa verilecek mesajı tanımladık
-        ],
+        unique: true,
         match: [
             /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, //internetten aldığımız hazır email regex'i
             "Please provide a valid email" // email alanı email formatına uymuyorsa varsa verilecek mesajı tanımladık
