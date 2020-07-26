@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema;
 
@@ -58,8 +59,17 @@ const UserSchema = new Schema({
 
 //.pre kaydedilmeden hemen önce yapılacak işlemleri belirlemememize yarar (Pre Hooks)
 UserSchema.pre("save", function(next){
-    console.log("Pre Hooks: Save");
-    next();
+    
+    //bcryptjs sitesinden hazır aldık (functionları arrow functiona dönüştürdük)
+    bcrypt.genSalt(10, (err, salt) => {
+        if(err) next(err);
+        
+        bcrypt.hash(this.password, salt, (err, hash) => {
+            if(err) next(err);
+            this.password = hash;
+            next();
+        });
+    });
 });
 
 module.exports = mongoose.model("User", UserSchema);
