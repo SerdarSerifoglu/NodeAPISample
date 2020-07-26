@@ -14,7 +14,7 @@ const customErrorHandler = (err,req,res,next) => {
     }
 
     res
-    .status(customError.status)
+    .status(customError.status || 500) //gelen hata yakalamadıysa 500 status döndür dedik
     .json({
         success: false,
         message: customError.message
