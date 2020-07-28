@@ -2,6 +2,7 @@ const User = require('../models/User');
 const CustomError = require('../helpers/error/CustomError');
 const asyncErrorWrapper = require("express-async-handler");
 const { sendJwtToClient } = require('../helpers/authorization/tokenHelpers');
+const { validateUserInput } = require('../helpers/input/inputHelpers');
 
 const register = asyncErrorWrapper(async (req,res,next) => {
     
@@ -27,6 +28,22 @@ const tokenTest = (req,res,next) => {
     });
 };
 
+const login = asyncErrorWrapper(async (req,res,next) => {
+const {email, password} = req.body;
+if(!validateUserInput(email, password)){
+    return next(new CustomError("Please check your input",400));
+}
+
+const user = await User.findOne({ email }).select("+password"); // UserSchema'da password dönmesin diye ayarladığımız için burada passwordü eklemek gerekti
+
+console.log(user);
+
+    res.status(200)
+    .json({
+    success: true
+});
+});
+
 const getUser = (req,res,next) => {
     res.json({
         success:true,
@@ -42,5 +59,6 @@ module.exports = {
     register,
     errorTest,
     tokenTest,
-    getUser
+    getUser,
+    login
 };
