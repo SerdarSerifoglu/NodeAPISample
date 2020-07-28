@@ -2,7 +2,8 @@ const User = require('../models/User');
 const CustomError = require('../helpers/error/CustomError');
 const asyncErrorWrapper = require("express-async-handler");
 const { sendJwtToClient } = require('../helpers/authorization/tokenHelpers');
-const { validateUserInput } = require('../helpers/input/inputHelpers');
+const { validateUserInput, comparePassword} = require('../helpers/input/inputHelpers');
+const { compareSync } = require('bcryptjs');
 
 const register = asyncErrorWrapper(async (req,res,next) => {
     
@@ -36,12 +37,10 @@ if(!validateUserInput(email, password)){
 
 const user = await User.findOne({ email }).select("+password"); // UserSchema'da password dönmesin diye ayarladığımız için burada passwordü eklemek gerekti
 
-console.log(user);
-
-    res.status(200)
-    .json({
-    success: true
-});
+if(!comparePassword(password, user.password)){
+    return next(new CustomError("Please check your credentials", 400));
+}
+sendJwtToClient(user, res);
 });
 
 const getUser = (req,res,next) => {
