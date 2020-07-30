@@ -43,6 +43,19 @@ if(!comparePassword(password, user.password)){
 sendJwtToClient(user, res);
 });
 
+const logout = asyncErrorWrapper(async (req,res,next) => {
+    const { NODE_ENV } = process.env;
+
+    return res.status(200).cookie({
+        httpOnly: true,
+        expires: new Date(Date.now()),
+        secure: NODE_ENV === "development" ? false : true
+    }).json({
+        success: true,
+        message: "Logout Successfull"
+    });
+});
+
 const getUser = (req,res,next) => {
     res.json({
         success:true,
@@ -59,5 +72,6 @@ module.exports = {
     errorTest,
     tokenTest,
     getUser,
-    login
+    login,
+    logout
 };
