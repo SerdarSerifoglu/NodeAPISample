@@ -25,9 +25,8 @@ app.use("/api", routers);
 //Error Handler
 app.use(customErrorHandler);
 
-app.get('/',(req,res) => {
-    res.send("Hello Serdar");
-})
+
+
 
 app.listen(PORT, function(){
     console.log(`App Started on ${PORT} : ${process.env.NODE_ENV}`);
