@@ -4,6 +4,7 @@ const asyncErrorWrapper = require("express-async-handler");
 const { sendJwtToClient } = require('../helpers/authorization/tokenHelpers');
 const { validateUserInput, comparePassword} = require('../helpers/input/inputHelpers');
 const { compareSync } = require('bcryptjs');
+const sendEmail = require("../helpers/libraries/sendEmail");
 
 const register = asyncErrorWrapper(async (req,res,next) => {
     
@@ -84,6 +85,13 @@ const imageUpload = asyncErrorWrapper(async (req,res,next) => {
 });
 
 //Forgot Password
+//Süreç: 
+//1. Emaili body'den aldık 
+//2. Bu email'e sahip kullanıcı var mı diye kontrol ettik
+//3. Böyle bir kullanıcı varsa reset token oluşturuldu.
+//4. Bu token ile birlikte user kaydına resetPasswordToken ve resetPasswordExpire alanları eklendi
+//5. Şifre resetleme için link ve template oluşturuldu.
+//6. try catch ile mail yollama işlemini gerçekleştirdik. Try catch kullanma sebebimiz gödnerme işleminde herhangi bir hata olursa user içinde kaydettiğimiz resetPasswordToken ve resetPasswordExpire alanlarını boşaltıp yeniden kaydedilmesini sağlamak için
 const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
     const resetEmail = req.body.email;
 
@@ -96,11 +104,33 @@ const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
     const resetPasswordToken = user.getResetPasswordTokenFromUser();
 
     await user.save();
+
+    const resetPasswordUrl = `http://localhost:5000/api/auth/resetpassword?resetPasswordToken=${resetPasswordToken}`;
+
+    const emailTemplate = `
+    <h3>Reset Your Password</h3>
+    <p>This <a href = '${resetPasswordUrl}' target = '_blank'>link</a> will expire in 1 hour</p>
+    `;
+
+    try {
+        await sendEmail({
+            from : process.env.SMTP_USER,
+            to: resetEmail,
+            subject: "Rest Your Password",
+            html: emailTemplate
+        });
+        return res.status(200).json({
+            success: true,
+            message: "Token Sent To Your Email"
+        });
+    }catch(err){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+    }
     
-    res.json({
-        success: true,
-        message: "Token Sent To Your Email"
-    });
+    await user.save();
+
+    return next(new CustomError("Email Could Not Be Sent", 500));
 });
 
 module.exports = {

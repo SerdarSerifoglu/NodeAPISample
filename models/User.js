@@ -88,6 +88,7 @@ UserSchema.methods.getResetPasswordTokenFromUser = function(){
 
     this.resetPasswordToken = resetPasswordToken;
     this.resetPasswordExpire = Date.now() + parseInt(REST_PASSWORD_EXPIRE);
+    return resetPasswordToken;
 };
 
 
