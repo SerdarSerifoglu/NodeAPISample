@@ -67,11 +67,22 @@ const getUser = (req,res,next) => {
     });
 };
 
+const imageUpload = asyncErrorWrapper(async (req,res,next) => {
+    //Image Upload Success
+
+    res.status(200)
+    .json({
+        success: true,
+        message: "Image Upload Successfull"
+    });
+});
+
 module.exports = {
     register,
     errorTest,
     tokenTest,
     getUser,
     login,
-    logout
+    logout,
+    imageUpload
 };
