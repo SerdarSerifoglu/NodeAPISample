@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5f1d0c56aa8ca00eba294fb2"},"role":"user","profile_image":"default.jpg","blocked":false,"name":"Y. Selim Şerifoğlu","email":"selimserif@gmail.com","password":"$2a$10$jvvSn/4EJs5JLxpRPKx6LuM2XiFn.Gnhj1lwRrlvYfR1ZRPnwQSJ6","createdAt":{"$date":{"$numberLong":"1595739222439"}},"__v":{"$numberInt":"0"}}
