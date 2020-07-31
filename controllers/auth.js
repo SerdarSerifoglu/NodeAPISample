@@ -133,6 +133,38 @@ const forgotPassword = asyncErrorWrapper(async (req,res,next) => {
     return next(new CustomError("Email Could Not Be Sent", 500));
 });
 
+const resetPassword = asyncErrorWrapper(async (req,res,next) => {
+    const {resetPasswordToken} = req.query;
+
+    const {password} = req.body;
+
+    if(!resetPasswordToken){
+        return next(new CustomError("Please provide a valid token", 400));
+    }
+
+    let user = await User.findOne({
+        resetPasswordToken : resetPasswordToken,
+        resetPasswordExpire : {$gt: Date.now()} //greater than mongo db özelliği expire date bugunden büyükse yani daha zamanı geçmemişse getir anlamına geliyor
+    });
+
+    if(!user){
+        return next(new CustomError("Invalid token or Session Expired", 404));
+    }
+
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+
+    return res.status(200)
+    .json({
+        success: true,
+        message: "Reset Password Process Successful"
+    });
+})
+
 module.exports = {
     register,
     errorTest,
@@ -141,5 +173,6 @@ module.exports = {
     login,
     logout,
     imageUpload,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 };
