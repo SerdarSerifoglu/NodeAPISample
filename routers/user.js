@@ -1,8 +1,9 @@
 const express = require('express');
-const {getSingleUser} = require('../controllers/user');
+const {getSingleUser, getAllUsers} = require('../controllers/user');
 const {checkUserExist} = require('../middlewares/database/databaseErrorHelpers');
 const router = express.Router();
 
 router.get("/:id",checkUserExist, getSingleUser);
+router.get("/", getAllUsers);
 
 module.exports = router;
