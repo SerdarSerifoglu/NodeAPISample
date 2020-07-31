@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const Schema = mongoose.Schema;
 
@@ -52,8 +53,13 @@ const UserSchema = new Schema({
     blocked: {
         type: Boolean,
         default: false
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpire: {
+        type: Date
     }
-     
 });
 
 //UserSchema Methods
@@ -70,6 +76,19 @@ UserSchema.methods.generateJwtFromUser = function(){
     });
     return token;
 };
+UserSchema.methods.getResetPasswordTokenFromUser = function(){
+    const randomHexString = crypto.randomBytes(15).toString("hex");
+    const {REST_PASSWORD_EXPIRE} = process.env;
+
+    
+    const resetPasswordToken = crypto
+    .createHash("SHA256")
+    .update(randomHexString)
+    .digest("hex");
+
+    this.resetPasswordToken = resetPasswordToken;
+    this.resetPasswordExpire = Date.now() + parseInt(REST_PASSWORD_EXPIRE);
+};
 
 
 //.pre kaydedilmeden hemen önce yapılacak işlemleri belirlemememize yarar (Pre Hooks)
@@ -84,7 +103,7 @@ UserSchema.pre("save", function(next){
 
         bcrypt.hash(this.password, salt, (err, hash) => {
             if(err) next(err);
-            this.password = hash;
+            this.password = hash
             next();
         });
     });
