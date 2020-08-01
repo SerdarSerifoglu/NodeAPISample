@@ -3,13 +3,16 @@ const CustomError = require('../helpers/error/CustomError');
 const asyncErrorWrapper = require("express-async-handler");
 
 
-const getAllQuestions = (req,res,next) => {
-    res
-    .status(200)
+const getAllQuestions =asyncErrorWrapper(async (req,res,next) => {
+    var questions = await Question.find();
+
+    res.status(200)
     .json({
-        success : true
+        success : true,
+        message: "Get All Questions",
+        data: questions
     });
-};
+});
 
 const askNewQuestion = asyncErrorWrapper(async (req,res,next) => {
     //Bu şekilde tek tek tanımlama yerine Question.create içinde spread(...) operatörüyle bütün req.body'i verebiliriz
