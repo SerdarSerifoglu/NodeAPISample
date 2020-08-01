@@ -46,8 +46,27 @@ const askNewQuestion = asyncErrorWrapper(async (req,res,next) => {
     });
 });
 
+const editQuestion = asyncErrorWrapper(async (req,res,next) => {
+    const requestBody = req.body;
+    const {id} = req.params;
+    const question = await Question.findByIdAndUpdate(
+        req.params.id,requestBody,{
+            new: true,
+            runValidators: true
+        }
+    );
+
+    return res.status(200)
+    .json({
+        success: true,
+        data: question
+    });
+
+});
+
 module.exports = {
     getAllQuestions,
     getQuestionById,
-    askNewQuestion
+    askNewQuestion,
+    editQuestion
 };
