@@ -1,5 +1,7 @@
 const express = require('express');
 const {getAccessToRoute, getAccessAdmin} = require('../middlewares/authorization/auth');
+const { blockUser } = require('../controllers/admin');
+const {checkUserExist} = require('../middlewares/database/databaseErrorHelpers');
 
 //Block User
 
@@ -8,12 +10,6 @@ const router = express.Router();
 //bütün routerlarda çalışacakları için middlewarelere aşağıdaki şekilde tanımladık
 router.use([getAccessToRoute, getAccessAdmin]); 
 
-router.get("/", (req,res,next) => {
-    res.status(200)
-    .json({
-        success: true,
-        message: "Admin Page"
-    });
-});
+router.get("/block/:id",checkUserExist, blockUser);
 
 module.exports = router;
