@@ -10,6 +10,8 @@ const {
 } = require('../controllers/question');
 const {getAccessToRoute, getQuestionOwnerAccess} = require('../middlewares/authorization/auth');
 const {checkQuestionExist} = require('../middlewares/database/databaseErrorHelpers');
+const answer = require("./answer");
+
 
 const router = express.Router();
 
@@ -24,5 +26,8 @@ router.delete(
 );
 router.get("/like/:id", [getAccessToRoute,checkQuestionExist], likeQuestion);
 router.get("/undolike/:id", [getAccessToRoute,checkQuestionExist], undoLikeQuestion);
+
+
+router.use("/:question_id/answers", checkQuestionExist, answer);
 
 module.exports = router;
