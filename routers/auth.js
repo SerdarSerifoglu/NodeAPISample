@@ -8,7 +8,8 @@ const {
     logout, 
     imageUpload,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    editDetails
 } = require('../controllers/auth');
 const { getAccessToRoute } = require('../middlewares/authorization/auth');
 const profileImageUpload = require('../middlewares/libraries/profileImageUpload');
@@ -24,5 +25,6 @@ router.get('/logout', getAccessToRoute, logout);
 router.post('/upload', [getAccessToRoute, profileImageUpload.single("profile_image")], imageUpload);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword', resetPassword);
+router.put("/edit", getAccessToRoute, editDetails);
 
 module.exports = router;
