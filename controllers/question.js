@@ -14,6 +14,19 @@ const getAllQuestions =asyncErrorWrapper(async (req,res,next) => {
     });
 });
 
+const getQuestionById = asyncErrorWrapper(async (req,res,next) => {
+    var {id} = req.params;
+    var question = await Question.findById(id);
+
+    res.status(200)
+    .json({
+        success: true,
+        message: "Get Question By Id Successful",
+        data: question
+
+    })
+})
+
 const askNewQuestion = asyncErrorWrapper(async (req,res,next) => {
     //Bu şekilde tek tek tanımlama yerine Question.create içinde spread(...) operatörüyle bütün req.body'i verebiliriz
     var {title,content,slug} = req.body;
@@ -35,5 +48,6 @@ const askNewQuestion = asyncErrorWrapper(async (req,res,next) => {
 
 module.exports = {
     getAllQuestions,
+    getQuestionById,
     askNewQuestion
 };
