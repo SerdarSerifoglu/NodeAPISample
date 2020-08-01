@@ -5,7 +5,8 @@ const {
     askNewQuestion, 
     editQuestion,
     deleteQuestion,
-    likeQuestion
+    likeQuestion,
+    undoLikeQuestion
 } = require('../controllers/question');
 const {getAccessToRoute, getQuestionOwnerAccess} = require('../middlewares/authorization/auth');
 const {checkQuestionExist} = require('../middlewares/database/databaseErrorHelpers');
@@ -22,5 +23,6 @@ router.delete(
     deleteQuestion
 );
 router.get("/like/:id", [getAccessToRoute,checkQuestionExist], likeQuestion);
+router.get("/undolike/:id", [getAccessToRoute,checkQuestionExist], undoLikeQuestion);
 
 module.exports = router;
