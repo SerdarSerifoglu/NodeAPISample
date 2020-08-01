@@ -1,6 +1,6 @@
 const express = require('express');
 const {getAccessToRoute, getAccessAdmin} = require('../middlewares/authorization/auth');
-const { blockUser } = require('../controllers/admin');
+const {blockUser,deleteUser} = require('../controllers/admin');
 const {checkUserExist} = require('../middlewares/database/databaseErrorHelpers');
 
 //Block User
@@ -11,5 +11,6 @@ const router = express.Router();
 router.use([getAccessToRoute, getAccessAdmin]); 
 
 router.get("/block/:id",checkUserExist, blockUser);
+router.delete("/user/:id", checkUserExist, deleteUser);
 
 module.exports = router;
