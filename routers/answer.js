@@ -9,7 +9,9 @@ const {
     getAllAnswersByQuestion,
     getSingleAnswer,
     editAnswer,
-    deleteAnswer
+    deleteAnswer,
+    likeAnswer,
+    undoLikeAnswer
     } = require("../controllers/answer");
 
 //mergeParams: önceki router'daki parametrelerinde bu router'a geçirilmesini sağlar.
@@ -20,4 +22,6 @@ router.get("/:answer_id", checkQuestionAndAnswerExist, getSingleAnswer);
 router.post("/",getAccessToRoute,addNewAnswerToQuestion);
 router.put("/:answer_id/edit", [checkQuestionAndAnswerExist, getAccessToRoute, getAnswerOwnerAccess], editAnswer);
 router.delete("/:answer_id/delete", [checkQuestionAndAnswerExist, getAccessToRoute, getAnswerOwnerAccess], deleteAnswer);
+router.get("/:answer_id/like", [checkQuestionAndAnswerExist, getAccessToRoute], likeAnswer);
+router.get("/:answer_id/undolike", [checkQuestionAndAnswerExist, getAccessToRoute], undoLikeAnswer);
 module.exports = router;
