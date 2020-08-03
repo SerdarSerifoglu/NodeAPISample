@@ -41,7 +41,30 @@ const getAllAnswersByQuestion = asyncErrorWrapper(async (req,res,next) => {
     });
 });
 
+const getSingleAnswer = asyncErrorWrapper(async (req,res,next) => {
+    const {answer_id}=req.params;
+
+    const answer = await Answer.findById(answer_id)
+    //path: detayı alınacak id alanını yazıyoruz
+    //select: alınan modeldeki hangi alanları almak istediğimizi belirtiyoruz birden fazla alanı belirtmek için aralarına boşluk koyuyoruz
+    .populate({
+        path: "user",
+        select: "name profile_image"
+    })
+    .populate({
+        path: "question",
+        select: "title"
+    });
+
+    return res.status(200)
+    .json({
+        success: true,
+        data: answer
+    });
+});
+
 module.exports = {
     addNewAnswerToQuestion,
-    getAllAnswersByQuestion
+    getAllAnswersByQuestion,
+    getSingleAnswer
 };
