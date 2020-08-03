@@ -23,6 +23,25 @@ const addNewAnswerToQuestion = asyncErrorWrapper(async (req,res,next) => {
     });
 });
 
+const getAllAnswersByQuestion = asyncErrorWrapper(async (req,res,next) => {
+    const {question_id} = req.params;
+
+    //.populate demememiz dönen sonuçta answers datalarınında bulunmasını sağlıyor
+    const question = await Question.findById(question_id).populate("answers");
+
+    const answers = question.answers;
+
+
+
+    return res.status(200)
+    .json({
+        success: true,
+        count: answers.length,
+        data: answers
+    });
+});
+
 module.exports = {
-    addNewAnswerToQuestion
+    addNewAnswerToQuestion,
+    getAllAnswersByQuestion
 };
