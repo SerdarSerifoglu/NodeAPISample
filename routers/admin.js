@@ -3,9 +3,6 @@ const {getAccessToRoute, getAccessAdmin} = require('../middlewares/authorization
 const {blockUser,deleteUser} = require('../controllers/admin');
 const {checkUserExist} = require('../middlewares/database/databaseErrorHelpers');
 
-//Block User
-
-//Delete User
 const router = express.Router();
 //bütün routerlarda çalışacakları için middlewarelere aşağıdaki şekilde tanımladık
 router.use([getAccessToRoute, getAccessAdmin]); 
