@@ -5,15 +5,25 @@ const asyncErrorWrapper = require("express-async-handler");
 
 const getAllQuestions =asyncErrorWrapper(async (req,res,next) => {
     let query = Question.find();
-
+    const populate = true;
+    const populateObject = {
+        path: "user",
+        select: "name profile_image"
+    };
+    //Seach
     if(req.query.search){
         const searchObject = {};
 
         const regex = new RegExp(req.query.search, "i");
         searchObject["title"] = regex;
-        
+
         query = query.where(searchObject);
     }
+    //Populate
+    if(populate){
+        query = query.populate(populateObject);
+    }
+
     const questions = await query;
 
     res.status(200)
