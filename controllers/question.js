@@ -47,6 +47,18 @@ const getAllQuestions =asyncErrorWrapper(async (req,res,next) => {
     }
     query = query.skip(startIndex).limit(limit);
 
+    //Sort : req.query.sortBy
+    const sortKey = req.query.sortBy;
+    if(sortKey === "most-answered"){
+        query = query.sort("-answerCount -createdAt"); // - verilmesi büyükten küçüğe sıralamayı sağlıyor
+    }
+    else if(sortKey === "most-liked"){
+        query = query.sort("-likeCount -createdAt");//likeCountları aynı ise createdAt'e göre sıralamayı sağlar
+    }
+    else{
+        query = query.sort("-createdAt");
+    }
+
     const questions = await query;
 
     res.status(200)
