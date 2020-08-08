@@ -26,6 +26,14 @@ const QuestionSchema = new Schema({
         required: true,
         ref: "User" //User modelini referans olarak gösterdik daha sonra User bilgilerine erişebilmek için
     },
+    likeCount: {
+        type: Number,
+        default: 0
+    },
+    answerCount: {
+        type: Number,
+        default: 0
+    },
     likes: [{
         type: mongoose.Schema.ObjectId,
         ref: "User"
