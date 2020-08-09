@@ -1,4 +1,5 @@
 const express = require('express');
+const Question = require("../models/Question");
 const {
     getAllQuestions, 
     getQuestionById, 
@@ -11,11 +12,18 @@ const {
 const {getAccessToRoute, getQuestionOwnerAccess} = require('../middlewares/authorization/auth');
 const {checkQuestionExist} = require('../middlewares/database/databaseErrorHelpers');
 const answer = require("./answer");
-
+const questionQueryMiddleware = require("../middlewares/query/questionQueryMiddleware");
 
 const router = express.Router();
 
-router.get("/", getAllQuestions);
+router.get("/",questionQueryMiddleware(
+    Question, {
+        population: {
+            path: "user",
+            select: "name profile_image"
+        }
+    }
+), getAllQuestions);
 router.get("/:id", checkQuestionExist, getQuestionById);
 router.post("/ask", getAccessToRoute, askNewQuestion);
 router.put("/edit/:id", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], editQuestion);
